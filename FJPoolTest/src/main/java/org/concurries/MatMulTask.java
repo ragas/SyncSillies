@@ -1,4 +1,4 @@
-package org.example;
+package org.concurries;
 
 import java.util.concurrent.CountedCompleter;
 import java.util.concurrent.ForkJoinTask;

@@ -1,4 +1,4 @@
-package org.example;
+package org.concurries;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -14,12 +14,19 @@ public class Main {
 
   static final int MIN_MATRIX_SIZE = 64;
   static final int MAX_MATRIX_SIZE = 512;
-  static final int MAX_WORK_SIZE_TEST = 256;
+  static final int MAX_WORK_SIZE_TEST = 512;
   static final int MAX_PARALLELISM_TEST = 32;
 
   public static void main(String[] args) {
     try {
+      System.out.print("Hit Enter to start\n");
+      var ignore = System.in.read();
+
       test();
+
+      System.out.print("Hit Enter to end\n");
+      ignore = System.in.read();
+
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -76,7 +83,7 @@ public class Main {
 
     for (int parallel = 1; parallel <= MAX_PARALLELISM_TEST; parallel = parallel * 2) {
       for (int split = 1; split <= MAX_WORK_SIZE_TEST; split = split * 2) {
-        var resultWorkSize = test_forkJoinPool(A, B, parallel, split);
+        var resultWorkSize = testForkJoinPool(A, B, parallel, split);
         results.add(resultWorkSize.withTag("work_size"));
       }
     }
@@ -84,9 +91,21 @@ public class Main {
     return results;
   }
 
-  static TestResult test_forkJoinPool(long[][] A, long[][] B, int parallelism, int split)
+  static TestResult testForkJoinPool(long[][] A, long[][] B, int parallelism, int split)
       throws Exception {
-    try (var forkJoinPool = ForkJoinPool.commonPool()) {
+    try (var forkJoinPool =
+        new ForkJoinPool(
+            parallelism,
+            ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+            null,
+            false,
+            0,
+            parallelism,
+            1,
+            null,
+            1L,
+            TimeUnit.MILLISECONDS)) {
+
       forkJoinPool.setParallelism(parallelism);
 
       MatMulTask.MAX_ARRAY_SIZE = split;

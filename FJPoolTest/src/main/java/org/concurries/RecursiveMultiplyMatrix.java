@@ -1,4 +1,4 @@
-package org.example;
+package org.concurries;
 
 public class RecursiveMultiplyMatrix {
   static long[][] multiply(
@@ -33,14 +33,7 @@ public class RecursiveMultiplyMatrix {
       add(
           C,
           multiply(A, B, rowA + newSize, colA, rowB, colB + newSize, newSize),
-          multiply(
-              A,
-              B,
-              rowA + newSize,
-              colA + newSize,
-              rowB + newSize,
-              colB + newSize,
-              newSize),
+          multiply(A, B, rowA + newSize, colA + newSize, rowB + newSize, colB + newSize, newSize),
           newSize,
           newSize);
     }
