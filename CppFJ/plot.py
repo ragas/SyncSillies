@@ -4,9 +4,9 @@ from matplotlib.pyplot import savefig
 
 df = pd.read_csv('performance.csv')
 
-sizes = [128, 256, 512, 1024]
-parallelism_ticks = [1, 2, 4, 8, 16, 32, 64]
-work_ticks = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+sizes = [64,128, 256, 512]
+parallelism_ticks = [1, 2, 4, 8, 16, 32]
+work_ticks = [1, 2, 4, 8, 16, 32, 64, 128]
 
 dimens = ['parallelism', 'work_size']
 count = 2
@@ -18,7 +18,7 @@ for dimen in dimens:
         i += 1
         df_sized = df[
             (df['size'] == size) &
-            ((df['work_size'] == 64) if dimen == 'parallelism' else (df['parallelism'] == 16))]
+            ((df['work_size'] == 32) if dimen == 'parallelism' else (df['parallelism'] == 8))]
 
         # baseline = df[
         #     (df['size'] == size) &
